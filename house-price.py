@@ -4,6 +4,9 @@ import numpy as np
 from sklearn import linear_model
 from sklearn.metrics import mean_squared_error
 
+import matplotlib.pyplot as plt
+import pylab
+
 
 train = pd.read_csv("kc_house_train_data.csv")
 test = pd.read_csv("kc_house_test_data.csv")
@@ -29,8 +32,30 @@ test["lat_plus_long"] = test["lat"] + test["long"]
 # Printing values to make sure
 # print train.shape
 # print test.shape
-print train.head(5)
+# print train.head(5)
 
+
+
+temp = train['log_sqft_living'].reshape(len(train.index),1)
+
+lr = linear_model.LinearRegression()
+lr.fit(temp, train['price'])
+pred = lr.predict(temp)
+
+test_log_sqft_living = test['log_sqft_living'].reshape(len(test.index),1)
+score = lr.score(test_log_sqft_living, test['price'])
+print train['log_sqft_living'].shape, pred.shape
+
+# Make some plots
+# train.plot("log_sqft_living", "price", kind='scatter')
+plt.plot(train["log_sqft_living"], train["price"], 'x')
+plt.plot(train["log_sqft_living"], pred, '.')
+plt.show()
+
+# print lr.coef_
+# pred = lr.predict(temp)
+# mse = mean_squared_error(train['price'], pred)
+# print mse
 
 
 # Step (3) taking the mean of the new test features
@@ -65,12 +90,12 @@ model_3_test = test[list(test.columns[3:6]) + list(test.columns[17:19]) + list(t
 # Step (5) fitting and predicting
 lr = linear_model.LinearRegression()
 lr.fit(model_1_train, train['price'])
-print lr.coef_
+# print lr.coef_
 # [ 'bedrooms'        'bathrooms'     'sqft_living'    'lat'            'long'          ]
 # [ -5.95865332e+04   1.57067421e+04   3.12258646e+02   6.58619264e+05   -3.09374351e+05]
 
 pred = lr.predict(model_1_train)
 mse = mean_squared_error(train['price'], pred)
 # print pred.shape
-print mse
+# print mse
 
