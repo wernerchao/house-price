@@ -36,26 +36,14 @@ test["lat_plus_long"] = test["lat"] + test["long"]
 
 
 
-temp = train['log_sqft_living'].reshape(len(train.index),1)
+# Step (2.5) Make plots to inspect relationships between features and response
+for col in train:
+    if col == "date" or col == "id" or col == "price":
+        continue
+    else:
+        train.plot(col, "price", kind='scatter')
+        plt.show()
 
-lr = linear_model.LinearRegression()
-lr.fit(temp, train['price'])
-pred = lr.predict(temp)
-
-test_log_sqft_living = test['log_sqft_living'].reshape(len(test.index),1)
-score = lr.score(test_log_sqft_living, test['price'])
-print train['log_sqft_living'].shape, pred.shape
-
-# Make some plots
-# train.plot("log_sqft_living", "price", kind='scatter')
-plt.plot(train["log_sqft_living"], train["price"], 'x')
-plt.plot(train["log_sqft_living"], pred, '.')
-plt.show()
-
-# print lr.coef_
-# pred = lr.predict(temp)
-# mse = mean_squared_error(train['price'], pred)
-# print mse
 
 
 # Step (3) taking the mean of the new test features
@@ -99,3 +87,27 @@ mse = mean_squared_error(train['price'], pred)
 # print pred.shape
 # print mse
 
+
+
+
+### ---------------------------------------------------------------------------------------------------
+### Below code plot the prediction with the training data of 1 feature
+# Reshaping the train feature so it can be fitted
+# temp_log_sqft_living = train['log_sqft_living'].reshape(len(train.index),1)
+
+# Fit and predict
+# lr = linear_model.LinearRegression()
+# lr.fit(temp, train['price'])
+# pred = lr.predict(temp_log_sqft_living)
+
+# Reshape the test feature so it can be scored
+# test_log_sqft_living = test['log_sqft_living'].reshape(len(test.index),1)
+
+# Check the score. 1 is highest
+# score = lr.score(test_log_sqft_living, test['price'])
+# print train['log_sqft_living'].shape, pred.shape
+
+# Make some plots to see the prediction
+# plt.plot(train["log_sqft_living"], train["price"], 'x')
+# plt.plot(train["log_sqft_living"], pred, '.')
+# plt.show()
