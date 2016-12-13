@@ -41,8 +41,8 @@ test["lat_plus_long"] = test["lat"] + test["long"]
 for col in train:
     if col == "date" or col == "id" or col == "price":
         continue
-    # elif col == "bathrooms":
-    else:
+    elif col == "bathrooms":
+    # else:
         train.plot(col, "price", kind='scatter')
         plt.show()
 
