@@ -3,10 +3,11 @@ import numpy as np
 
 from sklearn import linear_model
 from sklearn.metrics import mean_squared_error
+from sklearn.preprocessing import PolynomialFeatures
 
 # Uncomment below 2 lines to make plots
-import matplotlib.pyplot as plt
-import pylab
+# import matplotlib.pyplot as plt
+# import pylab
 
 
 train = pd.read_csv("kc_house_train_data.csv")
@@ -38,13 +39,13 @@ test["lat_plus_long"] = test["lat"] + test["long"]
 
 # Step (2.5) Make plots to inspect relationships between features and response.
 # Uncomment below to see all plots.
-for col in train:
-    if col == "date" or col == "id" or col == "price":
-        continue
-    elif col == "bathrooms":
-    # else:
-        train.plot(col, "price", kind='scatter')
-        plt.show()
+# for col in train:
+#     if col == "date" or col == "id" or col == "price":
+#         continue
+#     elif col == "bathrooms":
+#     # else:
+#         train.plot(col, "price", kind='scatter')
+#         plt.show()
 
 
 
@@ -78,38 +79,45 @@ model_3_test = test[list(test.columns[3:6]) + list(test.columns[17:19]) + list(t
 
 
 
+# Step (4.5) polynomial feature transformation
+poly = PolynomialFeatures(degree=2)
+poly_model_1_train = poly.fit_transform(model_1_train)
+print poly_model_1_train.shape
+
+
+
 # Step (5) fitting and predicting
 lr1 = linear_model.LinearRegression()
-lr1.fit(model_1_train, train['price'])
+lr1.fit(poly_model_1_train, train['price'])
 print model_2_train.head(0) # Check which column is which feature
 print lr1.coef_
 # [ 'bedrooms'        'bathrooms'     'sqft_living'    'lat'            'long'          ]
 # [ -5.95865332e+04   1.57067421e+04   3.12258646e+02   6.58619264e+05   -3.09374351e+05]
 
-lr2 = linear_model.LinearRegression()
-lr2.fit(model_2_train, train['price'])
-print model_2_train.head(0) # Check which column is which feature
-print lr2.coef_
+# lr2 = linear_model.LinearRegression()
+# lr2.fit(model_2_train, train['price'])
+# print model_2_train.head(0) # Check which column is which feature
+# print lr2.coef_
 
-lr3 = linear_model.LinearRegression()
-lr3.fit(model_3_train, train['price'])
+# lr3 = linear_model.LinearRegression()
+# lr3.fit(model_3_train, train['price'])
 
-pred1 = lr1.predict(model_1_test)
-mse1 = mean_squared_error(test['price'], pred1)
-pred2 = lr2.predict(model_2_test)
-mse2 = mean_squared_error(test['price'], pred2)
-pred3 = lr3.predict(model_3_test)
-mse3 = mean_squared_error(test['price'], pred3)
+pred1 = lr1.predict(poly_model_1_train)
+mse1 = mean_squared_error(train['price'], pred1)
+# pred2 = lr2.predict(model_2_test)
+# mse2 = mean_squared_error(test['price'], pred2)
+# pred3 = lr3.predict(model_3_test)
+# mse3 = mean_squared_error(test['price'], pred3)
 print "Printing MSE of all 3 models: "
-print mse1, mse2, mse3
+print mse1
 
 
 
-score1 = lr1.score(model_1_test, test['price'])
-score2 = lr2.score(model_2_test, test['price'])
-score3 = lr3.score(model_3_test, test['price'])
-print "Printing SCORE of all 3 models:"
-print score1, score2, score3
+# score1 = lr1.score(model_1_test, test['price'])
+# score2 = lr2.score(model_2_test, test['price'])
+# score3 = lr3.score(model_3_test, test['price'])
+# print "Printing SCORE of all 3 models:"
+# print score1
 
 
 
