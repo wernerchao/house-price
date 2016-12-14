@@ -113,19 +113,19 @@ for i in range(1, 3):
     print "Random Forest SCORE ONE: "
     print rf1_score
 
-    rf1 = RandomForestRegressor(n_estimators=50, min_samples_split=6, min_samples_leaf=3)
-    rf1.fit(model["model_2_train"], train["price"])
-    rf1.predict(model["model_2_test"])
-    rf1_score = rf1.score(model["model_2_test"], test['price'])
+    rf2 = RandomForestRegressor(n_estimators=50, min_samples_split=6, min_samples_leaf=3)
+    rf2.fit(model["model_2_train"], train["price"])
+    rf2.predict(model["model_2_test"])
+    rf2_score = rf2.score(model["model_2_test"], test['price'])
     print "Random Forest SCORE TWO: "
-    print rf1_score
+    print rf2_score
 
-    rf1 = RandomForestRegressor(n_estimators=50, min_samples_split=6, min_samples_leaf=3)
-    rf1.fit(model["model_3_train"], train["price"])
-    rf1.predict(model["model_3_test"])
-    rf1_score = rf1.score(model["model_3_test"], test['price'])
+    rf3 = RandomForestRegressor(n_estimators=50, min_samples_split=6, min_samples_leaf=3)
+    rf3.fit(model["model_3_train"], train["price"])
+    rf3.predict(model["model_3_test"])
+    rf3_score = rf3.score(model["model_3_test"], test['price'])
     print "Random Forest SCORE THREE: "
-    print rf1_score
+    print rf3_score
 
 
 
