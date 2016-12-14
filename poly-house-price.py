@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 
 from sklearn import linear_model
+from sklearn.ensemble import RandomForestRegressor
 from sklearn.metrics import mean_squared_error
 from sklearn.preprocessing import PolynomialFeatures
 
@@ -76,10 +77,14 @@ for i in range(1, 3):
     # Step (5) fitting and predicting
     lr1 = linear_model.LinearRegression()
     lr1.fit(model["model_1_train"], train['price'])
+    ridge1 = linear_model.Ridge(alpha=1.0)
+    ridge1.fit(model["model_1_train"], train['price'])
     # print lr1.coef_
 
     lr1_poly = linear_model.LinearRegression()
     lr1_poly.fit(d_poly["poly_model_1_train"], train['price'])
+    ridge1_poly = linear_model.Ridge(alpha=1.0)
+    ridge1_poly.fit(d_poly["poly_model_1_train"], train['price'])
     # print lr1_poly.coef_
 
     lr2 = linear_model.LinearRegression()
@@ -99,6 +104,31 @@ for i in range(1, 3):
     # print lr3_poly.coef_
 
 
+
+    ### Random Forest
+    rf1 = RandomForestRegressor(n_estimators=50, min_samples_split=6, min_samples_leaf=3)
+    rf1.fit(model["model_1_train"], train["price"])
+    rf1.predict(model["model_1_test"])
+    rf1_score = rf1.score(model["model_1_test"], test['price'])
+    print "Random Forest SCORE ONE: "
+    print rf1_score
+
+    rf1 = RandomForestRegressor(n_estimators=50, min_samples_split=6, min_samples_leaf=3)
+    rf1.fit(model["model_2_train"], train["price"])
+    rf1.predict(model["model_2_test"])
+    rf1_score = rf1.score(model["model_2_test"], test['price'])
+    print "Random Forest SCORE TWO: "
+    print rf1_score
+
+    rf1 = RandomForestRegressor(n_estimators=50, min_samples_split=6, min_samples_leaf=3)
+    rf1.fit(model["model_3_train"], train["price"])
+    rf1.predict(model["model_3_test"])
+    rf1_score = rf1.score(model["model_3_test"], test['price'])
+    print "Random Forest SCORE THREE: "
+    print rf1_score
+
+
+
     degree = i
     pred1 = lr1.predict(model["model_1_test"])
     mse1 = mean_squared_error(test['price'], pred1)
@@ -106,6 +136,18 @@ for i in range(1, 3):
     mse1_poly = mean_squared_error(test['price'], pred1_poly)
     print "Printing MSE of both model_1 (degree=%s): " %degree
     print mse1, mse1_poly
+
+
+
+    ### Ridge Regression
+    r_pred1 = ridge1.predict(model["model_1_test"])
+    r_mse1 = mean_squared_error(test['price'], r_pred1)
+    r_pred1_poly = ridge1_poly.predict(d_poly["poly_model_1_test"])
+    r_mse1_poly = mean_squared_error(test['price'], r_pred1_poly)
+    print "Printing MSE of both Ridge (degree=%s): " %degree
+    print r_mse1, r_mse1_poly
+
+
 
     pred2 = lr2.predict(model["model_2_test"])
     mse2 = mean_squared_error(test['price'], pred2)
